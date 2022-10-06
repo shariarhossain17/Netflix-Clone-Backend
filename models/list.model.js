@@ -1,35 +1,27 @@
 const mongoose = require("mongoose");
-const validator = require("validator")
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    unique: true,
-    required: true,
+const listSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    type: {
+      type: String,
+    },
+
+    genre: {
+      type: String,
+    },
+
+    content: {
+      type: Array,
+    },
   },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    validate:[validator.isEmail,"provide your email"]
-  },
-  password: {
-    type: String,
-    required: true,
-  },
+  { timestamps: true }
+);
 
-  profilePic: {
-    type:String,
-    default:""
-  },
-  isAdmin:{
-    type:Boolean,
-    default:false
-  }
+const List = mongoose.model("List", listSchema);
 
-  
-},{timestamps:true});
-
-const User = mongoose.model("User",userSchema)
-
-module.exports = User
+module.exports = Movie;
