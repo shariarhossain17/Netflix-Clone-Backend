@@ -1,6 +1,5 @@
 const { registerService, logInService } = require("../services/user.services");
 
-
 // register user
 module.exports.registerUser = async (req, res) => {
   try {
@@ -20,41 +19,40 @@ module.exports.registerUser = async (req, res) => {
   }
 };
 
-
 //  login user
 module.exports.loginUser = async (req, res) => {
   try {
+    const { email, password } = req.body;
 
-    const {email,password} = req.body
+    console.log(email,password);
 
-    if(!email || !password){
-      res.status(401).json({
-        status:false,
-        message:'please provide email or password',
-      })
-    };
-
-    const user = await logInService(email);
-
-
-    if(!user){
-      res.status(403).json({
-        status:false,
-        message:'wrong password or email',
-      })
-    }
-
-    const isPasswordValid = user.comparePassword(password, user.password);
-
-    console.log(isPasswordValid);
-
-    if (!isPasswordValid) {
-      res.status(403).json({
-        message: "Password incorrect",
+    if (!email || !password) {
+      return res.status(401).json({
+        status: false,
+        message: "please provide email or password",
       });
     }
 
-    const {password:pwd,...others} = user.toObject()
+    const user = await logInService(email);
+
+    if (!user) {
+     return  res.status(403).json({
+        status: false,
+        message: "please signup",
+      });
+    }
+
+    const isPasswordValid =  user.comparePassword(password, user.password);
+
+
+    if (!isPasswordValid) {
+       return res.status(403).json({
+        message: "Password incorrect",
+      });
+    }
+    
+
+    const { password: pwd, ...others } = user.toObject();
 
     res.status(200).json({
       status: true,
@@ -69,4 +67,3 @@ module.exports.loginUser = async (req, res) => {
     });
   }
 };
-
