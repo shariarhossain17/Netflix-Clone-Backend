@@ -113,37 +113,17 @@ module.exports.getAllUser = async (req, res) => {
 // get user stats
 
 module.exports.getUserStats = async (req, res) => {
-    const today = new Date();
-    const latYear = today.setFullYear(today.setFullYear() - 1);
-
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
   try {
-
-    console.log(months);
-    const data = await getStatsUser(months)
+    const data = await getStatsUser();
 
     res.status(200).json({
-        message:"success",
-        data:data
-    })
-    
+      message: "success",
+      data: data,
+    });
   } catch (error) {
     res.status(400).json({
-        message:"can't get data",
-        err:error
-    })
+      message: "can't get data",
+      err: error,
+    });
   }
 };

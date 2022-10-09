@@ -1,22 +1,20 @@
 const express = require("express");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 
+app.use(cors());
+app.use(express.json());
 
-app.use(cors())
-app.use(express.json())
+const userAuthRoute = require("../routes/user.auth.route");
+const userRoute = require("../routes/user.route");
+const movieRoute = require("../routes/movie.route");
 
-const userAuthRoute = require('../routes/user.auth.route')
-const userRoute = require('../routes/user.route')
+app.use("/api/v1/auth", userAuthRoute);
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/movie", movieRoute);
 
+app.get("/", (req, res) => {
+  res.send("netflix server running");
+});
 
-app.use('/api/v1/auth',userAuthRoute)
-app.use('/api/v1/user',userRoute)
-
-
-app.get('/',(req,res)=> {
-    res.send("netflix server running")
-})
-
-
-module.exports = app
+module.exports = app;
