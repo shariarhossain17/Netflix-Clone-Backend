@@ -19,3 +19,7 @@ exports.deleteUserService = async (id) => {
   const users = await User.findByIdAndDelete(id);
   return users;
 };
+exports.getUserServiceById = async (email) => {
+  const users = await User.findOne({ email: email });
+  return users;
+};

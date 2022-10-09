@@ -15,5 +15,9 @@ router.route('/:id')
 .delete(verifyToken,userController.deleteUser)
 
 
+router.route('/:email')
+.get(userController.getUserById)
+
+
 
 module.exports = router

@@ -3,6 +3,7 @@ const {
   getUserService,
   updateUserService,
   deleteUserService,
+  getUserServiceById,
 } = require("../services/user.service");
 
 const bCrypTo = require("bcryptjs");
@@ -51,6 +52,8 @@ module.exports.updateUser = async (req, res) => {
     });
   }
 };
+
+// delete user
 module.exports.deleteUser = async (req, res) => {
   if (req.user.id === req.params.id || req.user.isAdmin) {
     try {
@@ -71,4 +74,24 @@ module.exports.deleteUser = async (req, res) => {
       message: "you can delete only your account",
     });
   }
+};
+
+// get user by id
+module.exports.getUserById = async (req, res) => {
+
+    try {
+      const users = await getUserServiceById(req.params.email);
+
+      const { password: pwd, ...others } = users.toObject();
+      res.status(200).json({
+        status: true,
+        message: "user get success",
+        user:others
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: false,
+        message: "user can't get",
+      });
+    }
 };

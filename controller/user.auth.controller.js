@@ -57,7 +57,6 @@ module.exports.loginUser = async (req, res) => {
 
     const { password: pwd, ...others } = user.toObject();
 
-    console.log(others);
     res.status(200).json({
       status: true,
       message: "login success",
