@@ -5,8 +5,16 @@ const { verifyToken } = require("../middleware/veryfyToken");
 
 
 
+
+
+
 router.route('/')
 .get(verifyToken,userController.getAllUser)
+
+
+
+router.get('/stats',userController.getUserStats)
+
 
 
 

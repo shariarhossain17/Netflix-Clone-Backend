@@ -1,5 +1,4 @@
 const User = require("../models/user.model");
-const bCrypTo = require("bcryptjs");
 
 
 // update user
@@ -31,3 +30,20 @@ exports.getAllUserService = async (query) => {
   const users = query ? await User.find().sort({_id:-1}).limit(10): await User.find({});
   return users;
 };
+
+exports.getStatsUser = async (month) => {
+    const data = await User.aggregate([
+        {
+          $project: {
+            month: { $month: "$createdAt" },
+          },
+        },
+        {
+          $group: {
+            _id: "$month",
+            total: { $sum: 1 },
+          },
+        },
+      ]);
+      return data
+}
