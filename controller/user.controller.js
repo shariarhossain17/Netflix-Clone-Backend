@@ -1,4 +1,7 @@
 const { registerService, logInService } = require("../services/user.services");
+const { generateToken } = require("../utils/token");
+
+
 
 // register user
 module.exports.registerUser = async (req, res) => {
@@ -24,8 +27,6 @@ module.exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log(email,password);
-
     if (!email || !password) {
       return res.status(401).json({
         status: false,
@@ -36,28 +37,34 @@ module.exports.loginUser = async (req, res) => {
     const user = await logInService(email);
 
     if (!user) {
-     return  res.status(403).json({
+      return res.status(403).json({
         status: false,
         message: "please signup",
       });
     }
 
-    const isPasswordValid =  user.comparePassword(password, user.password);
-
+    const isPasswordValid = user.comparePassword(password, user.password);
 
     if (!isPasswordValid) {
-       return res.status(403).json({
+      return res.status(403).json({
         message: "Password incorrect",
       });
     }
+
     
+
+   const token = generateToken(user)
 
     const { password: pwd, ...others } = user.toObject();
 
+    console.log(others);
     res.status(200).json({
       status: true,
       message: "login success",
-      user: others,
+      data: {
+        user: others,
+        token:token
+      },
     });
   } catch (error) {
     res.status(500).json({
