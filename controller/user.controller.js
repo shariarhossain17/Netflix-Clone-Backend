@@ -4,22 +4,10 @@ const {
   updateUserService,
   deleteUserService,
   getUserServiceById,
+  getAllUserService,
 } = require("../services/user.service");
 
 const bCrypTo = require("bcryptjs");
-
-module.exports.getUser = async (req, res) => {
-  try {
-    const users = await getUserService();
-    res.status(200).json({
-      status: true,
-      message: "user get success",
-      user: users,
-    });
-  } catch (error) {
-    res.status();
-  }
-};
 
 // update user
 module.exports.updateUser = async (req, res) => {
@@ -95,3 +83,32 @@ module.exports.getUserById = async (req, res) => {
       });
     }
 };
+
+
+// get all user 
+module.exports.getAllUser = async (req, res) => {
+    const query = req.query.new
+    if (req.user.isAdmin) {
+      try {
+        const users = await getAllUserService(query);
+        res.status(200).json({
+          status: true,
+          message: "user get success",
+          data:users
+        });
+      } catch (error) {
+        res.status(500).json({
+          status: false,
+          message: "user can't get",
+          err:error
+        });
+      }
+    } else {
+      res.status(403).json({
+        status: false,
+        message: "you have no access this route",
+      });
+    }
+  };
+
+

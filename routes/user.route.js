@@ -6,7 +6,7 @@ const { verifyToken } = require("../middleware/veryfyToken");
 
 
 router.route('/')
-.get(userController.getUser)
+.get(verifyToken,userController.getAllUser)
 
 
 
