@@ -2,6 +2,7 @@ const { rawListeners } = require("../models/user.model");
 const {
   getUserService,
   updateUserService,
+  deleteUserService,
 } = require("../services/user.service");
 
 const bCrypTo = require("bcryptjs");
@@ -30,17 +31,44 @@ module.exports.updateUser = async (req, res) => {
 
         req.body.password = hashPassword;
       }
+
+      const users = await updateUserService(req.params.id, req.body);
+      res.status(200).json({
+        status: true,
+        message: "user updated success",
+        user: users,
+      });
+    } else {
+      res.status(403).json({
+        status: false,
+        message: "you can update only your account",
+      });
     }
-    const users = await updateUserService(req.params.id, req.body);
-    res.status(200).json({
-      status: true,
-      message: "user updated success",
-      user: users,
-    });
   } catch (error) {
     res.status(500).json({
       status: false,
       message: "user can't updated",
+    });
+  }
+};
+module.exports.deleteUser = async (req, res) => {
+  if (req.user.id === req.params.id || req.user.isAdmin) {
+    try {
+      const users = await deleteUserService(req.params.id);
+      res.status(200).json({
+        status: true,
+        message: "user deleted success",
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: false,
+        message: "user can't deleted",
+      });
+    }
+  } else {
+    res.status(403).json({
+      status: false,
+      message: "you can delete only your account",
     });
   }
 };

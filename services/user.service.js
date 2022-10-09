@@ -15,3 +15,7 @@ exports.updateUserService = async (id, data) => {
   );
   return users;
 };
+exports.deleteUserService = async (id) => {
+  const users = await User.findByIdAndDelete(id);
+  return users;
+};

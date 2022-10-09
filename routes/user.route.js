@@ -12,6 +12,7 @@ router.route('/')
 
 router.route('/:id')
 .patch(verifyToken,userController.updateUser)
+.delete(verifyToken,userController.deleteUser)
 
 
 
