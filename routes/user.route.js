@@ -1,10 +1,18 @@
 const router = require("express").Router()
+const userController = require("../controller/user.controller");
+const { verifyToken } = require("../middleware/veryfyToken");
 
-const userController = require('../controller/user.controller')
 
 
-router.post('/register',userController.registerUser)
-router.post('/login',userController.loginUser)
+
+router.route('/')
+.get(userController.getUser)
+
+
+
+router.route('/:id')
+.patch(verifyToken,userController.updateUser)
+
 
 
 module.exports = router

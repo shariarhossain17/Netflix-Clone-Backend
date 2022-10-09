@@ -5,7 +5,8 @@ require("dotenv").config()
 exports.generateToken = (userInfo) =>{
     const payload = {
         email:userInfo.email,
-        role:userInfo.role
+        isAdmin:userInfo.isAdmin,
+        id:userInfo._id
     }
 
     const token = jwt.sign(payload,process.env.jwt_token,{

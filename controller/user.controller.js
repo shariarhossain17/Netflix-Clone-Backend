@@ -1,76 +1,46 @@
-const { registerService, logInService } = require("../services/user.services");
-const { generateToken } = require("../utils/token");
+const { rawListeners } = require("../models/user.model");
+const {
+  getUserService,
+  updateUserService,
+} = require("../services/user.service");
 
+const bCrypTo = require("bcryptjs");
 
-
-// register user
-module.exports.registerUser = async (req, res) => {
+module.exports.getUser = async (req, res) => {
   try {
-    const user = await registerService(req.body);
-
+    const users = await getUserService();
     res.status(200).json({
       status: true,
-      message: "user crete success",
-      user: user,
+      message: "user get success",
+      user: users,
     });
   } catch (error) {
-    res.status(500).json({
-      status: false,
-      message: "user can't crete",
-      error: error,
-    });
+    res.status();
   }
 };
 
-//  login user
-module.exports.loginUser = async (req, res) => {
+// update user
+module.exports.updateUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    if (req.user.id === req.params.id || req.user.isAdmin) {
+      if (req.body.password) {
+        const password = req.body.password;
+        console.log(password);
+        const hashPassword = bCrypTo.hashSync(password);
 
-    if (!email || !password) {
-      return res.status(401).json({
-        status: false,
-        message: "please provide email or password",
-      });
+        req.body.password = hashPassword;
+      }
     }
-
-    const user = await logInService(email);
-
-    if (!user) {
-      return res.status(403).json({
-        status: false,
-        message: "please signup",
-      });
-    }
-
-    const isPasswordValid = user.comparePassword(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(403).json({
-        message: "Password incorrect",
-      });
-    }
-
-    
-
-   const token = generateToken(user)
-
-    const { password: pwd, ...others } = user.toObject();
-
-    console.log(others);
+    const users = await updateUserService(req.params.id, req.body);
     res.status(200).json({
       status: true,
-      message: "login success",
-      data: {
-        user: others,
-        token:token
-      },
+      message: "user updated success",
+      user: users,
     });
   } catch (error) {
     res.status(500).json({
       status: false,
-      message: "user can't find",
-      error: error,
+      message: "user can't updated",
     });
   }
 };
