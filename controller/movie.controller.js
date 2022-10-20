@@ -19,7 +19,8 @@ module.exports.createMovie = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
         status:false,
-        message:"can't movie created"
+        message:"can't movie created",
+        error:error
     })
   }
 };
