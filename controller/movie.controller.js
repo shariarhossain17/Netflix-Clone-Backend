@@ -2,6 +2,8 @@ const {
   createMovieService,
   updateMovieService,
   deleteMovieService,
+  getMovieServiceById,
+  getRandomMovieService,
 } = require("../services/movie.service");
 
 module.exports.createMovie = async (req, res, next) => {
@@ -77,6 +79,41 @@ module.exports.deleteMovie = async (req, res, next) => {
     res.status(500).json({
       status: false,
       message: "can't movie deleted",
+      error: error,
+    });
+  }
+};
+
+// get movie by id
+module.exports.gateMovieById = async (req, res, next) => {
+  try {
+    const movie = await getMovieServiceById(req.params.id);
+    res.status(200).json({
+      status: true,
+      message: "movie get success",
+      data: movie,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: "can't movie get",
+      error: error,
+    });
+  }
+};
+module.exports.gatRandomMovie = async (req, res, next) => {
+  try {
+    const {type} = req.query
+    const movie = await getRandomMovieService(type);
+    res.status(200).json({
+      status: true,
+      message: "movie get success",
+      data: movie,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: "can't movie get",
       error: error,
     });
   }

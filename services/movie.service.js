@@ -21,3 +21,27 @@ exports.deleteMovieService = async (id) => {
   const movie = await Movie.deleteOne({_id:id});
   return movie;
 };
+
+// get movie by id
+exports.getMovieServiceById = async (id) => {
+  const movie = await Movie.findById(id);
+  return movie;
+};
+// get random movie
+exports.getRandomMovieService= async (type) => {
+  let movie;
+  if(type === "series"){
+    movie = await Movie.aggregate([
+        {$match:{isSeries:true}},
+        {$sample:{size:1},}
+    ])
+  }
+  else{
+    movie = await Movie.aggregate([
+        {$match:{isSeries:false}},
+        {$sample:{size:1},}
+    ])
+  }
+
+  return movie
+};
