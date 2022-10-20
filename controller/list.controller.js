@@ -1,6 +1,7 @@
 const {
   createListService,
   deleteListService,
+  getListService,
 } = require("../services/list.services");
 
 module.exports.createList = async (req, res, next) => {
@@ -56,18 +57,19 @@ module.exports.deleteList = async (req, res, next) => {
 };
 
 // get all list
-module.exports.createList = async (req, res, next) => {
+module.exports.getList = async (req, res, next) => {
     try {
-      const list = await createListService(req.body);
+        const query = req.query
+      const list = await getListService(query);
       res.status(200).json({
         status: true,
-        message: "list created success",
+        message: "list get success",
         data: list,
       });
     } catch (error) {
       res.status(400).json({
         status: false,
-        message: "can't create list",
+        message: "can't get list",
         error: error,
       });
     }
