@@ -7,6 +7,7 @@ router.use(verifyToken)
 
 router.route('/')
 .post(movieController.createMovie)
+.get(movieController.getAllMovie)
 
 router.get("/random",movieController.gatRandomMovie)
 

@@ -4,6 +4,7 @@ const {
   deleteMovieService,
   getMovieServiceById,
   getRandomMovieService,
+  getMovieService,
 } = require("../services/movie.service");
 
 module.exports.createMovie = async (req, res, next) => {
@@ -114,6 +115,31 @@ module.exports.gatRandomMovie = async (req, res, next) => {
     res.status(500).json({
       status: false,
       message: "can't movie get",
+      error: error,
+    });
+  }
+};
+
+
+// get all movie
+module.exports.getAllMovie = async (req, res, next) => {
+  try {
+    if (!req.user.isAdmin) {
+      res.status(403).json({
+        message: "you are not authorized",
+      });
+    }
+
+    const movie = await getMovieService()
+    res.status(200).json({
+      status: true,
+      message: "movie get success",
+      data: movie,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: "can't get movie",
       error: error,
     });
   }

@@ -45,3 +45,9 @@ exports.getRandomMovieService= async (type) => {
 
   return movie
 };
+
+// get all movies
+exports.getMovieService = async () => {
+    const movie = await Movie.find({});
+    return movie;
+  };
