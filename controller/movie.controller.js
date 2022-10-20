@@ -134,7 +134,7 @@ module.exports.getAllMovie = async (req, res, next) => {
     res.status(200).json({
       status: true,
       message: "movie get success",
-      data: movie,
+      data: movie.reverse(),
     });
   } catch (error) {
     res.status(500).json({
